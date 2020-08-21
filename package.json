@@ -6,8 +6,8 @@
   "scripts": {
     "compile": "tsc -w",
     "start-server": "nodemon ./build/server.js",
-    "dev": "npm run compile & npm run start-server",
-    "start": "tsc && node ./build/server.js"
+    "dev": "nodemon -x ts-node src/server.ts",
+    "start": "ts-node src/server.ts"
   },
   "author": "Javi",
   "license": "ISC",
@@ -23,6 +23,7 @@
     "moment": "^2.27.0",
     "mongoose": "^5.10.0",
     "morgan": "^1.10.0",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   },
   "devDependencies": {
