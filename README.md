@@ -23,8 +23,11 @@ Login | Returns a token
 Resgister | Email unique
 Protected routes | Header will be requiered
 
+
 ## TODO 
-> API endpoints doc
-> CI and testing
-> Show coverage and status of main branch
+- [x] Nice readme 😊
+- [ ] API endpoints doc
+- [ ] CI and testing
+- [ ] Show coverage and status of main branch
+
 
