@@ -4,7 +4,7 @@ import moment from 'moment'
 
 import userRepo from '../repository/userRepository'
 import User from '../domain/user'
-import Utils from '../ultils'
+import Utils from '../utils/responseParser'
 import { promises } from 'fs'
 
 

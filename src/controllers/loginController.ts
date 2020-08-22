@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express'
 import { check, validationResult } from 'express-validator'
 
 import userService from '../services/userService';
-import Utils from '../ultils';
+import Utils from '../utils/responseParser';
 import { rejects } from 'assert';
 
 class ExpensesRouter {
@@ -14,14 +14,7 @@ class ExpensesRouter {
   }
 
   routes() {
-    /*this.router.get('/',
-      (req, res) => {
-        const user = User.fromBody(JSON.stringify({ 'name': 'walter', 'lastName': 'Gómez' }))
-        userRepo.create(user)
-          .then(() => res.send("creado"))
-          .catch(() => res.send("error"))
-      });*/
-    this.router.post('/',
+    this.router.post('/register',
       [
         check('name', 'El nombre no puede estar vacio').not().isEmpty(),
         check('lastName', 'El apellido no puede estar vacio').not().isEmpty(),

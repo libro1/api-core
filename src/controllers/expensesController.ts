@@ -12,10 +12,7 @@ class ExpensesRouter {
   routes() {
     this.router.get('/',
       (req, res) => {
-        const user = User.fromBody(JSON.stringify({'name':'walter','lastName':'Gómez'}))
-        userRepo.create(user)
-          .then(() => res.send("creado"))
-          .catch(() => res.send("error"))
+        res.json(req.body)
       });
   }
 }

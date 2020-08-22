@@ -6,7 +6,8 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 import expensesRoutes from './controllers/expensesController'
-import userRoutes from './controllers/userController'
+import loginRoutes from './controllers/loginController'
+import { auth } from './middlewares/auth'
 
 class Server {
     public app: express.Application
@@ -29,15 +30,15 @@ class Server {
         //Mongo connection
         const mongoUrl = "yourURL"
         mongoose.connect(process.env.MONGO || mongoUrl)
-            .then(()=>console.log("Mongo in ON"))
-            .catch((err)=> console.log(`Error while connecting to mongo ${err.message}`))
+            .then(() => console.log("Mongo in ON"))
+            .catch((err) => console.log(`Error while connecting to mongo ${err.message}`))
     }
 
     public routes(): void {
         const router: express.Router = express.Router()
 
-        this.app.use('/expenses', expensesRoutes)
-        this.app.use('/user', userRoutes)
+        this.app.use('/expenses', auth, expensesRoutes)
+        this.app.use('/', loginRoutes)
     }
 
     start(): void {
