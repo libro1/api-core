@@ -5,9 +5,11 @@ import cors from 'cors'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
+import { auth } from './middlewares/auth'
 import expensesRoutes from './controllers/expensesController'
 import loginRoutes from './controllers/loginController'
-import { auth } from './middlewares/auth'
+import categoriesRoutes from './controllers/categoriesController'
+
 
 class Server {
     public app: express.Application
@@ -38,6 +40,7 @@ class Server {
         const router: express.Router = express.Router()
 
         this.app.use('/expenses', auth, expensesRoutes)
+        this.app.use('/categories', auth, categoriesRoutes)
         this.app.use('/', loginRoutes)
     }
 

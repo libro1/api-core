@@ -23,7 +23,7 @@ class ExpensesRouter {
       ],
       (req: Request, res: Response) => {
         const errors = validationResult(req)
-        if (!errors.isEmpty()) { res.status(422).json(errors) }
+        if (!errors.isEmpty()) { return res.status(422).json(errors) }
         userService.createUser(req.body)
           .then((msg) => res.json({message: "El usuario se ha creado con exito!"}))
           .catch((err) => {

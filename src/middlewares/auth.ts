@@ -12,12 +12,12 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   let payload
 
   try {
-    payload = jwt.decode(token, process.env.SECRET || 'aa')
+    payload = jwt.decode(token, process.env.SECRET || 'ee')
   } catch{
     return res.status(401).json(Utils.getResposeError('Token invalido'))
   }
 
-  if (moment().unix() > payload.expiredAr)
+  if (moment().unix() > payload.expiredAt)
     return res.status(401).json(Utils.getResposeError('Token expirado'))
 
   req.body = {

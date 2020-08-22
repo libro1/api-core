@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import bcrypt from 'bcryptjs'
+
 import userRepo from '../repository/userRepository'
 import User from '../domain/user'
 class ExpensesRouter {
@@ -12,7 +14,7 @@ class ExpensesRouter {
   routes() {
     this.router.get('/',
       (req, res) => {
-        res.json(req.body)
+        res.send(bcrypt.hashSync("pasawprd",10))
       });
   }
 }

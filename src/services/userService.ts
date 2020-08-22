@@ -4,8 +4,6 @@ import moment from 'moment'
 
 import userRepo from '../repository/userRepository'
 import User from '../domain/user'
-import Utils from '../utils/responseParser'
-import { promises } from 'fs'
 
 
 class UserService {
@@ -33,9 +31,9 @@ class UserService {
 
   createToken(user:User){
     const payload = {
-      usuarioId: user.id,
+      userId: user.id,
       createdAt: moment().unix(),
-      expiredAr:  moment().add(6,'hours').unix()
+      expiredAt:  moment().add(6,'hours').unix()
     }
 
     return jwt.encode(payload,process.env.SECRET || "ee")
