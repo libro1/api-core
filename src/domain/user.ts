@@ -3,7 +3,7 @@ import { prop } from "@typegoose/typegoose";
 import Category from "./category";
 
 export default class User {
-  id?: string;
+  _id?: string;
   @prop()
   name!: string;
   @prop()
@@ -12,18 +12,23 @@ export default class User {
   email!: string;
   @prop()
   password!: string;
-  @prop()
-  customCategories:Array<Object> = []
+  @prop({ type: Category })
+  customCategories!: Category[];
 
   addNewCategory(newCategory: Category) {
     this.customCategories.push(newCategory);
   }
 
-  /*removeCategory(cateogryName: string){
-    this.customCategories = this.customCategories.filter((elem)=>{
-      return elem.name.toLocaleLowerCase() === cateogryName.toLocaleLowerCase()
-    })
-  }*/
+  deleteCategory(categoryId: string) {
+    this.customCategories = this.customCategories.filter(
+      (elem) => elem._id != categoryId
+    );
+  }
+
+  editCategory(editedCategory: Category, categoryId: string) {
+    this.deleteCategory(categoryId);
+    this.customCategories.push(editedCategory);
+  }
 
   static fromBody(userJson: Object): User {
     return Object.assign(new User(), userJson);

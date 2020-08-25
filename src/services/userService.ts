@@ -31,7 +31,7 @@ class UserService {
 
   createToken(user:User){
     const payload = {
-      userId: user.id,
+      userId: user._id,
       createdAt: moment().unix(),
       expiredAt:  moment().add(6,'hours').unix()
     }
