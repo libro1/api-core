@@ -6,15 +6,8 @@ class UserRepository extends GenericRepo<typeof Transaction> {
     return this.dataModel.find({ userId: userId });
   }
 
-  updateTransaction(
-    transactionId: string,
-    userId: string,
-    transactionUpdated: Transaction
-  ) {
-    return this.dataModel.replaceOne(
-      { _id: transactionId, userId: userId },
-      transactionUpdated
-    );
+  public deleteTransaction(id: string, userId: string) {
+    return this.dataModel.deleteOne({ _id: id, userId: userId });
   }
 }
 
