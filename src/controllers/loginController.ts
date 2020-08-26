@@ -3,7 +3,6 @@ import { check, validationResult } from 'express-validator'
 
 import userService from '../services/userService';
 import Utils from '../utils/responseParser';
-import { rejects } from 'assert';
 
 class ExpensesRouter {
   router: Router;

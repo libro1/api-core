@@ -6,7 +6,7 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 
 import { auth } from './middlewares/auth'
-import expensesRoutes from './controllers/expensesController'
+import treansactionRoutes from './controllers/transactionsController'
 import loginRoutes from './controllers/loginController'
 import categoriesRoutes from './controllers/categoriesController'
 
@@ -39,7 +39,7 @@ class Server {
     public routes(): void {
         const router: express.Router = express.Router()
 
-        this.app.use('/expenses', auth, expensesRoutes)
+        this.app.use('/transactions', auth, treansactionRoutes)
         this.app.use('/categories', auth, categoriesRoutes)
         this.app.use('/', loginRoutes)
     }

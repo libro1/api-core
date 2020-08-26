@@ -20,10 +20,7 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
   if (moment().unix() > payload.expiredAt)
     return res.status(401).json(Utils.getResposeError('Token expirado'))
 
-  req.body = {
-    ...req.body,
-    ...payload
-  }
+  req.headers.userId = payload.userId
 
   next()
 

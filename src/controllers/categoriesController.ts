@@ -17,7 +17,7 @@ class CategoriesController {
   routes() {
 
     this.router.post("/", async (req, res) => {
-      const user = await userRepo.searchById(req.body.userId);
+      const user = await userRepo.searchById(req.headers.userId as string);
       if (user) {
         const category = new Category(req.body.name, req.body.color);
         user.addNewCategory(category);
@@ -30,14 +30,14 @@ class CategoriesController {
     });
 
     this.router.get("/", async (req, res) => {
-      const user = await userRepo.searchById(req.body.userId);
+      const user = await userRepo.searchById(req.headers.userId as string);
       if (user) res.json(user.customCategories);
       else
         res.status(404).json(Utils.getResposeError("Ususuario no encontrado"));
     });
 
     this.router.delete("/:id", async (req, res) => {
-      const user = await userRepo.searchById(req.body.userId);
+      const user = await userRepo.searchById(req.headers.userId as string);
       if (user) {
         user.deleteCategory(req.params.id);
         user.save();
@@ -48,7 +48,7 @@ class CategoriesController {
     });
 
     this.router.put("/:id", async (req, res) => {
-      const user = await userRepo.searchById(req.body.userId);
+      const user = await userRepo.searchById(req.headers.userId as string);
       if (user) {
         const category = new Category(req.body.name, req.body.color);
         user.editCategory(category,req.params.id);

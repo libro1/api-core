@@ -33,7 +33,7 @@ class UserService {
     const payload = {
       userId: user._id,
       createdAt: moment().unix(),
-      expiredAt:  moment().add(6,'hours').unix()
+      expiredAt:  moment().add(6,'years').unix()
     }
 
     return jwt.encode(payload,process.env.SECRET || "ee")
