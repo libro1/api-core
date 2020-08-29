@@ -6,7 +6,7 @@ export default class Transaction {
   @prop()
   name?: string;
   @prop()
-  date!: string;
+  date!: Date;
   @prop()
   amount!: string;
   @prop()

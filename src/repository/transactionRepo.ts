@@ -2,8 +2,8 @@ import GenericRepo from "./baseRepo";
 import User from "../domain/user";
 import Transaction from "../domain/transaction";
 class UserRepository extends GenericRepo<typeof Transaction> {
-  searchUserTransactions(userId: string) {
-    return this.dataModel.find({ userId: userId });
+  searchUserTransactions(filters: Array<Object>) {
+    return this.dataModel.aggregate(filters);
   }
 
   public deleteTransaction(id: string, userId: string) {

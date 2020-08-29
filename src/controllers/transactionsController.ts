@@ -1,9 +1,10 @@
 import { Router, Request, Response } from "express";
+import { check, validationResult, checkSchema } from "express-validator";
+
+import filtersMiddleware from "../middlewares/filterTransactionsMiddleware";
 import transactionRepo from "../repository/transactionRepo";
 import Transaction from "../domain/transaction";
 import Utils from "../utils/responseParser";
-import { check, validationResult, checkSchema } from "express-validator";
-
 class ExpensesRouter {
   router: Router;
 
@@ -23,9 +24,9 @@ class ExpensesRouter {
   }
 
   routes() {
-    this.router.get("/", async (req, res) => {
+    this.router.get("/", filtersMiddleware, async (req, res) => {
       const transactions = await transactionRepo.searchUserTransactions(
-        req.headers.userId as string
+        req.body.filters
       );
       res.json(transactions);
     });
@@ -73,15 +74,17 @@ class ExpensesRouter {
         }
       }
     );
-    
+
     this.router.delete("/:tid", async (req, res) => {
       try {
         const deletion = await transactionRepo.deleteTransaction(
           req.params.tid,
           req.headers.userId as string
         );
-        if( deletion.n === 0 )
-          return res.status(404).json(Utils.getResposeError('Transacción no encontrada'));
+        if (deletion.n === 0)
+          return res
+            .status(404)
+            .json(Utils.getResposeError("Transacción no encontrada"));
         return res.json({ message: "Transancción eliminada con exito" });
       } catch (e) {
         res.status(500).json(Utils.getResposeError(e.message));
