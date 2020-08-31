@@ -8,7 +8,7 @@ export default class Transaction {
   @prop()
   date!: Date;
   @prop()
-  amount!: string;
+  amount!: number;
   @prop()
   userId!: string;
   @prop()

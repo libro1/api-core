@@ -31,6 +31,26 @@ class ExpensesRouter {
       res.json(transactions);
     });
 
+    this.router.get("/report", filtersMiddleware, async (req, res) => {
+      const expenses = await transactionRepo.categoriesReport(
+        req.headers.userId as string,
+        true
+      );
+      const earnings = await transactionRepo.categoriesReport(
+        req.headers.userId as string,
+        false
+      );
+      const total = await transactionRepo.totalExpensesReport(
+        req.headers.userId as string
+      );
+      const report = {
+        expenses,
+        earnings,
+        total,
+      }
+      res.json(report);
+    });
+
     this.router.post("/", this.checks, async (req: Request, res: Response) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
