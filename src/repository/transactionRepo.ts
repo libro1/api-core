@@ -10,9 +10,9 @@ class UserRepository extends GenericRepo<typeof Transaction> {
     return this.dataModel.deleteOne({ _id: id, userId: userId });
   }
 
-  public categoriesReport(userId: string, expense: boolean) {
+  public categoriesReport(filters: Array<Object>, expense: boolean) {
     return this.dataModel.aggregate([
-      { $match: { userId: userId } },
+      ...filters,
       { $match: { expense: expense } },
       {
         $group: {
@@ -25,9 +25,9 @@ class UserRepository extends GenericRepo<typeof Transaction> {
     ]);
   }
 
-  public totalExpensesReport(userId: string) {
+  public totalExpensesReport(filters: Array<Object>) {
     return this.dataModel.aggregate([
-      { $match: { userId: userId } },
+      ...filters,
       {
         $group: {
           _id: "$expense",

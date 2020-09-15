@@ -1,17 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import { isUndefined } from "util";
-import { mongoose } from "@typegoose/typegoose";
-import { json } from "body-parser";
+import { Request } from "express";
 
-const filterTransactions = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+import { mongoose } from "@typegoose/typegoose";
+
+const filterTransactions = (req: Request) => {
   const filters: Array<Object> = [{ $match: { userId: req.headers.userId } }];
 
-  if (!isUndefined(req.query.expense))
-    filters.push({ $match: { expense: JSON.parse(req.query.expense as string) } });
+  if (req.query.expense !== undefined)
+    filters.push({
+      $match: { expense: JSON.parse(req.query.expense as string) },
+    });
 
   if (req.query.month)
     filters.push(
@@ -27,7 +24,8 @@ const filterTransactions = (
     });
 
   req.body.filters = filters;
-  next();
+
+  return filters;
 };
 
 export default filterTransactions;

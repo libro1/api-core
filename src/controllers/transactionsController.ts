@@ -1,10 +1,11 @@
 import { Router, Request, Response } from "express";
 import { check, validationResult, checkSchema } from "express-validator";
 
-import filtersMiddleware from "../middlewares/filterTransactionsMiddleware";
 import transactionRepo from "../repository/transactionRepo";
 import Transaction from "../domain/transaction";
 import Utils from "../utils/responseParser";
+import filterTransactions from "../domain/filters";
+import transactionsService from "../services/trasactionsService";
 class ExpensesRouter {
   router: Router;
 
@@ -24,31 +25,21 @@ class ExpensesRouter {
   }
 
   routes() {
-    this.router.get("/", filtersMiddleware, async (req, res) => {
+    this.router.get("/", async (req, res) => {
+      const filters = filterTransactions(req);
       const transactions = await transactionRepo.searchUserTransactions(
-        req.body.filters
+        filters
       );
       res.json(transactions);
     });
 
-    this.router.get("/report", filtersMiddleware, async (req, res) => {
-      const expenses = await transactionRepo.categoriesReport(
-        req.headers.userId as string,
-        true
-      );
-      const earnings = await transactionRepo.categoriesReport(
-        req.headers.userId as string,
-        false
-      );
-      const total = await transactionRepo.totalExpensesReport(
-        req.headers.userId as string
-      );
-      const report = {
-        expenses,
-        earnings,
-        total,
-      }
-      res.json(report);
+    this.router.get("/report", async (req, res) => {
+      const filters = filterTransactions(req);
+      transactionsService.getReport(filters).then((report) => {
+        res.json(report);
+      }).catch((err)=>{
+        res.status(err.status).json(Utils.getResposeError(err.message))
+      })
     });
 
     this.router.post("/", this.checks, async (req: Request, res: Response) => {

@@ -4,8 +4,6 @@ import { getModelForClass } from "@typegoose/typegoose";
 import userRepo from "../repository/userRepository";
 import Category from "../domain/category";
 import Utils from "../utils/responseParser";
-import User from "../domain/user";
-import { addListener } from "process";
 class CategoriesController {
   router: Router;
 
@@ -53,7 +51,7 @@ class CategoriesController {
         const category = new Category(req.body.name, req.body.color);
         user.editCategory(category,req.params.id);
         user.save();
-        return res.json({ message: "Edita2" });
+        return res.json({ message: "Categoria editada con exito" });
       }
       else
         return res.status(404).json(Utils.getResposeError("Usuario no encontrado"))
