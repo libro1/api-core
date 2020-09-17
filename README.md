@@ -26,8 +26,8 @@ Protected routes | Header will be requiered
 
 ## TODO 
 - [x] Nice readme 😊
-- [ ] API endpoints doc
+- [X] API endpoints doc
 - [ ] CI and testing
-- [ ] Show coverage and status of main branch
+- [ ] Show coverage and build status
 
 
