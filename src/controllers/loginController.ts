@@ -22,13 +22,13 @@ class ExpensesRouter {
       ],
       (req: Request, res: Response) => {
         const errors = validationResult(req)
-        if (!errors.isEmpty()) { return res.status(422).json(errors) }
+        if (!errors.isEmpty()) { return res.status(400).json(errors) }
         userService.createUser(req.body)
-          .then((msg) => res.json({message: "El usuario se ha creado con exito!"}))
+          .then((msg) => res.status(201).json({message: "El usuario se ha creado con exito!"}))
           .catch((err) => {
             if (err.code === 11000) //Compruebo el codigo de error de index
-              res.status(400).json(Utils.getResposeError("Error al crear el usuario ❌, mail ya existe"))
-            res.status(422).json(Utils.getResposeError("Error al crear el usuario ❌"))
+              res.status(422).json(Utils.getResposeError("Error al crear el usuario ❌, mail ya existe"))
+            res.status(500).json(Utils.getResposeError("Error al crear el usuario ❌"))
           })
       }
     )

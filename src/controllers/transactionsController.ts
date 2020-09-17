@@ -51,7 +51,7 @@ class ExpensesRouter {
         const transaction = Transaction.fromBody(req.body);
         transaction.userId = req.headers.userId as string;
         await transactionRepo.create(transaction);
-        return res.json({ message: "transacción agregada con exito" });
+        return res.status(201).json({ message: "transacción agregada con exito" });
       } catch (e) {
         return res.status(500).json(Utils.getResposeError(e.message));
       }

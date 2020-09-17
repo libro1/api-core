@@ -1,0 +1,676 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Libro 1",
+    "contact": {
+      "name": "Javier Gómez",
+      "email": "javiemgz@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Auth operations"
+    },
+    {
+      "name": "Categories",
+      "description": "User categories managment"
+    },
+    {
+      "name": "Transactions",
+      "description": "User Transactions managment"
+    }
+  ],
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Creates a new user",
+        "description": "Creates a new user, in order to login to the application",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "inventoryItem",
+            "description": "New user to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User created"
+          },
+          "400": {
+            "description": "missing parameter"
+          },
+          "422": {
+            "description": "Mail already registered"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Creates a new user",
+        "description": "Creates a new user, in order to login to the application",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "UserCredentials",
+            "description": "User email and password",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged in",
+            "schema": {
+              "$ref": "#/definitions/Session"
+            }
+          },
+          "401": {
+            "description": "Bad credentials"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Returns all the user categories",
+        "description": "Returns all the user categories fully described",
+        "parameters": [
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, array of categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Creates a new category",
+        "description": "Creates a new category, in order separate transactions",
+        "parameters": [
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "New category",
+            "description": "Name and hexa color for category, id not required",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Category created"
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      }
+    },
+    "/categories/{categoryId}": {
+      "put": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Edit category",
+        "description": "Edits a category specified in the id",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "string objectId of the category id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "Edited category",
+            "description": "Name and hexa color for category, id not required",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category edited"
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Categories"
+        ],
+        "summary": "Delete category",
+        "description": "Deletes the category specified in the id",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "string objectId of the category id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, category deleted",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      }
+    },
+    "/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Returns all the user transactions",
+        "description": "Returns all the user transactions fully described",
+        "parameters": [
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "expense",
+            "in": "query",
+            "description": "Send true to get only expenses, false al the earnings",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Number of the month to get from 1 - 12",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "The id of a category to get all transactions that belongs to specified category",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, array of categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Transaction"
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Create transation",
+        "parameters": [
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "New transaction",
+            "description": "Data to create a new transaction, id is not required",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transaction created"
+          },
+          "400": {
+            "description": "Missing body property"
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      }
+    },
+    "/transactions/{transactionId}": {
+      "put": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Edit transation",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "Transaction",
+            "description": "Data to edit a transaction, id is not required",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Transaction"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction edited"
+          },
+          "400": {
+            "description": "Missing body property"
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Delete a transaction",
+        "parameters": [
+          {
+            "name": "transactionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, transaction deleted"
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          },
+          "404": {
+            "description": "Transaction not found"
+          }
+        }
+      }
+    },
+    "/transactions/report": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Report of all transactions",
+        "description": "Returns a detailed report of user expenses and earnigs, that can be filtered many ways",
+        "parameters": [
+          {
+            "name": "UserToken",
+            "in": "header",
+            "description": "Logged user token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "expense",
+            "in": "query",
+            "description": "Send true to get only expenses, false al the earnings",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "description": "Number of the month to get from 1 - 12",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "The id of a category to get all transactions that belongs to specified category",
+            "required": false,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          },
+          "401": {
+            "description": "Missing or invalid token"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "email",
+        "lastName",
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "name": {
+          "type": "string",
+          "example": "Ricardo"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Perez"
+        },
+        "email": {
+          "type": "string",
+          "example": "ricardo@mail.com"
+        }
+      }
+    },
+    "FullUser": {
+      "type": "object",
+      "required": [
+        "email",
+        "lastName",
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "name": {
+          "type": "string",
+          "example": "Ricardo"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Perez"
+        },
+        "email": {
+          "type": "string",
+          "example": "ricardo@mail.com"
+        },
+        "customCategories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        }
+      }
+    },
+    "Category": {
+      "required": [
+        "color",
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "name": {
+          "type": "string",
+          "example": "Casa"
+        },
+        "color": {
+          "type": "string",
+          "format": "hexadecimal",
+          "example": "#fbfbfb"
+        }
+      }
+    },
+    "Transaction": {
+      "required": [
+        "amount",
+        "category",
+        "date",
+        "expense",
+        "name"
+      ],
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "name": {
+          "type": "string",
+          "example": "Gasto 1"
+        },
+        "date": {
+          "type": "string",
+          "format": "date",
+          "example": "2020-08-24",
+          "description": "Date string in format YYYY-MM-DD"
+        },
+        "amount": {
+          "type": "number",
+          "example": 500
+        },
+        "userId": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "expense": {
+          "type": "boolean",
+          "example": false,
+          "description": "Explicits if the transaccion is an expense or not"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      }
+    },
+    "Session": {
+      "properties": {
+        "token": {
+          "type": "string",
+          "format": "jwt",
+          "description": "Sessión token that grants access to make request"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the logged user"
+        },
+        "fullName": {
+          "type": "string",
+          "description": "Name and last name of the logged user"
+        },
+        "userId": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619",
+          "description": "Id of the logged user"
+        }
+      }
+    },
+    "CategoryReport": {
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "5f447cecb7dc5b00178e9619"
+        },
+        "name": {
+          "type": "string",
+          "example": "Casa"
+        },
+        "color": {
+          "type": "string",
+          "format": "hexadecimal",
+          "example": "#fbfbfb"
+        },
+        "value": {
+          "type": "number",
+          "example": 4500,
+          "description": "Total expeses/earnings in the category"
+        }
+      }
+    },
+    "TotalGrouped": {
+      "properties": {
+        "_id": {
+          "type": "boolean",
+          "format": "uuid",
+          "description": "False for expenses true for earnings"
+        },
+        "value": {
+          "type": "number",
+          "example": 4500,
+          "description": "Total expeses/earnings of all categories"
+        }
+      }
+    },
+    "Report": {
+      "properties": {
+        "expenses": {
+          "type": "array",
+          "description": "Total expenses grouped by categories",
+          "items": {
+            "$ref": "#/definitions/CategoryReport"
+          }
+        },
+        "earnings": {
+          "type": "array",
+          "description": "Total earnings grouped by categories",
+          "items": {
+            "$ref": "#/definitions/CategoryReport"
+          }
+        },
+        "total": {
+          "type": "array",
+          "description": "Total amount of money, grouped in expenses (_id true) or earnings (_id false)",
+          "items": {
+            "$ref": "#/definitions/TotalGrouped"
+          }
+        },
+        "balanceStatus": {
+          "type": "number",
+          "example": -200,
+          "description": "Total earnings minus total expenses"
+        }
+      }
+    }
+  }
+}

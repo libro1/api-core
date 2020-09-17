@@ -20,7 +20,7 @@ class CategoriesController {
         const category = new Category(req.body.name, req.body.color);
         user.addNewCategory(category);
         user.save();
-        return res.json({ message: "Categoria agregada con exíto!" });
+        return res.status(201).json({ message: "Categoria agregada con exíto!" });
       } else
         return res
           .status(404)
