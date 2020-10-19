@@ -29,25 +29,23 @@ class Server {
     this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use("/", swaggerUi.serve, swaggerUi.setup(apiDoc));
     //Mongo connection
     const mongoUrl = "localhost:27017";
     mongoose
-      .connect(process.env.MONGO || mongoUrl)
-      .then(() => console.log("Mongo in ON"))
-      .catch((err) =>
-        console.log(`Error while connecting to mongo ${err.message}`)
-      );
+    .connect(process.env.MONGO || mongoUrl)
+    .then(() => console.log("Mongo in ON"))
+    .catch((err) =>
+    console.log(`Error while connecting to mongo ${err.message}`)
+    );
   }
-
+  
   public routes(): void {
-    const router: express.Router = express.Router();
-
+    this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(apiDoc));
     this.app.use("/transactions", auth, treansactionRoutes);
     this.app.use("/categories", auth, categoriesRoutes);
     this.app.use("/", loginRoutes);
   }
-
+  
   start(): void {
     this.app.listen(process.env.PORT || 3100, () => {
       console.log("Server Started");

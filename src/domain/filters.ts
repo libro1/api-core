@@ -16,6 +16,12 @@ const filterTransactions = (req: Request) => {
       { $match: { month: Number(req.query.month) } }
     );
 
+  if (req.query.year)
+    filters.push(
+      { $addFields: { year: { $year: "$date" } } },
+      { $match: { year: Number(req.query.year) } }
+    );
+
   if (req.query.category)
     filters.push({
       $match: {
