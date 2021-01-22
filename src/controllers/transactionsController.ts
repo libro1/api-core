@@ -35,11 +35,14 @@ class ExpensesRouter {
 
     this.router.get("/report", async (req, res) => {
       const filters = filterTransactions(req);
-      transactionsService.getReport(filters).then((report) => {
-        res.json(report);
-      }).catch((err)=>{
-        res.status(err.status).json(Utils.getResposeError(err.message))
-      })
+      transactionsService
+        .getReport(filters)
+        .then((report) => {
+          res.json(report);
+        })
+        .catch((err) => {
+          res.status(err.status).json(Utils.getResposeError(err.message));
+        });
     });
 
     this.router.post("/", this.checks, async (req: Request, res: Response) => {
@@ -51,7 +54,9 @@ class ExpensesRouter {
         const transaction = Transaction.fromBody(req.body);
         transaction.userId = req.headers.userId as string;
         await transactionRepo.create(transaction);
-        return res.status(201).json({ message: "transacción agregada con exito" });
+        return res
+          .status(201)
+          .json({ message: "transacción agregada con exito" });
       } catch (e) {
         return res.status(500).json(Utils.getResposeError(e.message));
       }
